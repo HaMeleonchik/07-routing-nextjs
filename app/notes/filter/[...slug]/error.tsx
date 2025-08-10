@@ -1,6 +1,6 @@
 'use client'
 
-import css from "../../components/loaderErrorCss/loaderErrorCss.module.css"
+import css from "@/components/loaderErrorCss/loaderErrorCss.module.css"
 interface Props{
   error:Error
 }

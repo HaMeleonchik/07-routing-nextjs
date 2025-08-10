@@ -1,12 +1,12 @@
 'use client'
 import css from "./notes.module.css"
-import style from "../../components/loaderErrorCss/loaderErrorCss.module.css"
-import NoteList from "../../components/NoteList/NoteList"
-import { fetchNotes } from "../../lib/api"
-import SearchBox from "../../components/SearchBox/SearchBox";
-import Modal from "../../components/Modal/Modal";
-import Pagination from "../../components/Pagination/Pagination";
-import NoteForm from "../../components/NoteForm/NoteForm";
+import style from "@//components/loaderErrorCss/loaderErrorCss.module.css"
+import NoteList from "@//components/NoteList/NoteList"
+import { fetchNotes } from "@//lib/api"
+import SearchBox from "@//components/SearchBox/SearchBox";
+import Modal from "@//components/Modal/Modal";
+import Pagination from "@//components/Pagination/Pagination";
+import NoteForm from "@/components/NoteForm/NoteForm";
 import { useQuery, keepPreviousData} from '@tanstack/react-query';
 import { useDebounce } from "use-debounce";
 import { useState } from "react";
@@ -17,9 +17,10 @@ interface initialDataProps{
   initialTotalPages: number;
   initialSearchQuery: string;
   initialPage: number;
+  tag:string | undefined,
 }
 
-export default function NotesClient({initialNotes, initialTotalPages, initialSearchQuery, initialPage}:initialDataProps) {
+export default function NotesClient({initialNotes, initialTotalPages, initialSearchQuery, initialPage, tag}:initialDataProps) {
   const [query, setQuery] = useState(initialSearchQuery)
   const [isOpenModal, setOpenModal] = useState(false)
   const [currentPage, setCurrentPage] = useState(initialPage)
@@ -27,8 +28,8 @@ export default function NotesClient({initialNotes, initialTotalPages, initialSea
   const [debouncedSearchQuery] = useDebounce(query, 300)
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["notes", debouncedSearchQuery, currentPage],
-    queryFn: () => fetchNotes(debouncedSearchQuery, currentPage),
+    queryKey: ["notes", debouncedSearchQuery, currentPage,  tag],
+    queryFn: () => fetchNotes(debouncedSearchQuery, currentPage,  tag),
     placeholderData: keepPreviousData,
     initialData: {
       notes: initialNotes,

@@ -22,15 +22,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  noteDetailsPreview,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode,
+ noteDetailsPreview: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <TanStackProvider>
-        <Header/>
-        {children}
+          <Header />
+          {children}
+          {noteDetailsPreview}
         <Footer />
         </TanStackProvider>
       </body>

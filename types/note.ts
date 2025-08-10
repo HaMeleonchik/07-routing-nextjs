@@ -12,8 +12,3 @@ export interface NewNote {
     tag: "Personal" | "Work" | "Todo" |"Meeting" | "Shopping";
 }
 
-// export interface NoteDetails {
-//     title: string;
-//     content: string;
-//     updatedAt: string
-// }

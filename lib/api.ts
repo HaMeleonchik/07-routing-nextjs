@@ -5,25 +5,31 @@ import type {  NewNote, Note } from "../types/note";
 interface NoteHttpResponse{
     notes: Note[], 
     totalPages: number,
+    tag:string,
 }
-const url = "https://notehub-public.goit.study/api/notes"
 const myKey = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
-export async function fetchNotes(searchQuery: string, page: number): Promise<{notes: Note[], totalPages:number}> {
-    const response = await axios.get<NoteHttpResponse>(url, {
+const api = axios.create({
+    baseURL: "https://notehub-public.goit.study/api",
+    headers: {
+            Authorization: `Bearer ${myKey}`,
+        }
+})
+
+
+export async function fetchNotes(searchQuery: string, page: number, tag?:string): Promise<{notes: Note[], totalPages:number, tag?:string}> {
+    const response = await api.get<NoteHttpResponse>("/notes", {
         params: {
             ...(searchQuery.trim() && { search: searchQuery.trim() }),
             page,
             perPage: 12,
+            tag,
         },
-        headers: {
-            Authorization: `Bearer ${myKey}`,
-        }
     }
     )
     return {
         notes: response.data.notes,
-        totalPages:response.data.totalPages
+        totalPages: response.data.totalPages,
     }
 }
 
@@ -31,12 +37,7 @@ export async function fetchNotes(searchQuery: string, page: number): Promise<{no
 
 
 export async function createNote(taskData: NewNote): Promise<Note> {
-    const response = await axios.post<Note>(url, taskData, {
-        headers: {
-            Authorization: `Bearer ${myKey}`,
-        }
-    }
-    )
+    const response = await api.post<Note>("/notes", taskData)
 
     return response.data
 
@@ -44,23 +45,13 @@ export async function createNote(taskData: NewNote): Promise<Note> {
 
 
 export async function deleteNote(taskId: string):Promise<Note> {
-const response = await axios.delete<Note>(`${url}/${taskId}`, {
-        headers: {
-            Authorization: `Bearer ${myKey}`,
-        }
-    }
-    )
+const response = await api.delete<Note>(`/notes/${taskId}`)
     return response.data
 }
 
 
 export async function fetchNoteById(noteId: string): Promise<Note> {
-const response = await axios.get<Note>(`${url}/${noteId}`, {
-        headers: {
-            Authorization: `Bearer ${myKey}`,
-        }
-    }
-    )
+const response = await api.get<Note>(`/notes/${noteId}`)
     return response.data
 }
 
