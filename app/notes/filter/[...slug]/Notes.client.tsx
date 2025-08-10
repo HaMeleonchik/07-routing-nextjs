@@ -12,7 +12,7 @@ import { useDebounce } from "use-debounce";
 import { useState } from "react";
 import { Note } from "@/types/note"
 
-interface initialDataProps{
+interface DataProps{
   initialNotes: Note[];
   initialTotalPages: number;
   initialSearchQuery: string;
@@ -20,7 +20,7 @@ interface initialDataProps{
   tag:string | undefined,
 }
 
-export default function NotesClient({initialNotes, initialTotalPages, initialSearchQuery, initialPage, tag}:initialDataProps) {
+export default function NotesClient({initialNotes, initialTotalPages, initialSearchQuery, initialPage, tag}:DataProps) {
   const [query, setQuery] = useState(initialSearchQuery)
   const [isOpenModal, setOpenModal] = useState(false)
   const [currentPage, setCurrentPage] = useState(initialPage)
@@ -29,7 +29,7 @@ export default function NotesClient({initialNotes, initialTotalPages, initialSea
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["notes", debouncedSearchQuery, currentPage,  tag],
-    queryFn: () => fetchNotes(debouncedSearchQuery, currentPage,  tag),
+    queryFn: () => fetchNotes(query, currentPage,  tag),
     placeholderData: keepPreviousData,
     initialData: {
       notes: initialNotes,
@@ -47,7 +47,7 @@ export default function NotesClient({initialNotes, initialTotalPages, initialSea
   
   return <div className={css.app}>
 	<header className={css.toolbar}>
-      <SearchBox value={debouncedSearchQuery} onSearch = { updateSearchQuery} />
+      <SearchBox value={query} onSearch = { updateSearchQuery} />
     {totalPages > 1 && <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />}
 		<button className={css.button} onClick={()=> setOpenModal(true)}>Create note + </button>
     </header>

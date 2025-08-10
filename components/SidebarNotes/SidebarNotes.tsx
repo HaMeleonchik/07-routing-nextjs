@@ -1,8 +1,10 @@
 import css from "./SidebarNotes.module.css"
 import Link from "next/link"
 
-export default async function SidebarNotes() {
-     const categories:string[] = ["All", "Personal", "Work", "Todo", "Meeting", "Shopping"]
+interface CatProps{
+  categories: string[];
+}
+export default async function SidebarNotes({categories}: CatProps) {
     
     return <ul className={css.menuList}>
     {categories.map(cat => 

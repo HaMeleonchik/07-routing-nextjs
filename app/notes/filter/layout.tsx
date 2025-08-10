@@ -7,8 +7,8 @@ interface Props{
 export default function NotesLayout({ children, sidebar}: Props) {
     return (
         <div className={css.container}>
-            {children}
             {sidebar}
+            {children}
         </div>
     )
 }

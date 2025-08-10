@@ -5,7 +5,7 @@ import type {  NewNote, Note } from "../types/note";
 interface NoteHttpResponse{
     notes: Note[], 
     totalPages: number,
-    tag:string,
+    tag: string,
 }
 const myKey = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
@@ -17,13 +17,13 @@ const api = axios.create({
 })
 
 
-export async function fetchNotes(searchQuery: string, page: number, tag?:string): Promise<{notes: Note[], totalPages:number, tag?:string}> {
+export async function fetchNotes(searchQuery: string, page: number, tag?:string,): Promise<{notes: Note[],  totalPages:number, tag?:string,}> {
     const response = await api.get<NoteHttpResponse>("/notes", {
         params: {
             ...(searchQuery.trim() && { search: searchQuery.trim() }),
             page,
-            perPage: 12,
             tag,
+            perPage: 12,
         },
     }
     )

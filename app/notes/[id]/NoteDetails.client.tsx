@@ -1,13 +1,16 @@
 "use client"
-import { useParams } from "next/navigation"
+// import { useParams } from "next/navigation"
 import { fetchNoteById } from "../../../lib/api"
 import css from "./NoteDetails.module.css"
 import { useQuery } from "@tanstack/react-query"
 import style from "../../../components/loaderErrorCss/loaderErrorCss.module.css"
 
-export default function NoteDetailsClient() {
+interface NoteDetailsClientProps{
+    id: string;
+}
+export default function NoteDetailsClient({id}:NoteDetailsClientProps) {
     
-    const { id } = useParams<{ id: string }>();
+    // const { id } = useParams<{ id: string }>();
     
 
  const {data:note, isLoading, isError} = useQuery({
@@ -23,7 +26,7 @@ export default function NoteDetailsClient() {
     <p className={css.content}>{ note?.content}</p>
 	  <p className={css.date}>{ note?.updatedAt}</p>
         </div>
-    { isLoading && <p className={style.loadingText}>Loading, please wait...</p> }
+    {isLoading && <p className={style.loadingText}>Loading, please wait...</p> }
     {isError && !note && <p className={style.errorText}>Something went wrong.</p>}
     </div>
 
