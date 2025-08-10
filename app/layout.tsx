@@ -22,10 +22,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  noteDetailsPreview,
+  modal,
 }: Readonly<{
   children: React.ReactNode,
- noteDetailsPreview: React.ReactNode;
+ modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -33,7 +33,7 @@ export default function RootLayout({
         <TanStackProvider>
           <Header />
           {children}
-          {noteDetailsPreview}
+          {modal}
         <Footer />
         </TanStackProvider>
       </body>
