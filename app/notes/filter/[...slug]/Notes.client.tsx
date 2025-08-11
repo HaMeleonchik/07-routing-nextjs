@@ -18,6 +18,11 @@ interface DataProps{
   tag:string | undefined,
 }
 
+interface NoteResponse{
+  notes: Note[], 
+  totalPages:number,
+}
+
 export default function NotesClient({initialNotes, initialTotalPages, tag}:DataProps) {
   const [query, setQuery] = useState("")
   const [isOpenModal, setOpenModal] = useState(false)
@@ -25,11 +30,11 @@ export default function NotesClient({initialNotes, initialTotalPages, tag}:DataP
 
   const [debouncedSearchQuery] = useDebounce(query, 300)
 
-  if (tag === "undefined") {
+  if (tag === undefined) {
     alert("no tags")
   }
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery<NoteResponse>({
     queryKey: ["notes", debouncedSearchQuery, currentPage,  tag],
     queryFn: () => fetchNotes(debouncedSearchQuery, currentPage,  tag),
     placeholderData: keepPreviousData,

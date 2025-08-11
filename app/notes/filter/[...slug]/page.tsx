@@ -15,7 +15,7 @@ const tag = filterNot === "All" ? undefined : filterNot
   
   const initialData = await fetchNotes(searchQuery, page, tag)
 
-    return <NotesClient
+  return <NotesClient
     initialNotes={initialData.notes}
     initialTotalPages={ initialData.totalPages}
     tag={tag}
