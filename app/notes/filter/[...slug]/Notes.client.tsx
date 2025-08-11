@@ -29,7 +29,7 @@ export default function NotesClient({initialNotes, initialTotalPages, initialSea
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["notes", debouncedSearchQuery, currentPage,  tag],
-    queryFn: () => fetchNotes(query, currentPage,  tag),
+    queryFn: () => fetchNotes(debouncedSearchQuery, currentPage,  tag),
     placeholderData: keepPreviousData,
     initialData: {
       notes: initialNotes,

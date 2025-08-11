@@ -5,19 +5,22 @@ import css from "./NotePreview.module.css"
 import { useParams } from "next/navigation";
 import { fetchNoteById } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
+import style from "../../../../components/loaderErrorCss/loaderErrorCss.module.css"
 
+// interface NotePreviewProps{}
 
 export default function NotePreview() {
 
   const { id } = useParams<{ id: string }>();
     
- const {data:note} = useQuery({
+ const {data:note, isLoading, isError} = useQuery({
         queryKey: ["note", id],
         queryFn: () => fetchNoteById(id),
         refetchOnMount:false,
  })    
 
     const router = useRouter();
+
     const handleClose = () => {
     router.back()
     }
@@ -33,8 +36,9 @@ export default function NotePreview() {
     <p className={css.content}>{note?.content}</p>
     <p className={css.tag}>{ note?.tag}</p>
     <p className={css.date}>{note?.updatedAt}</p>
-                
         </div>
-    </div>
+        </div>
+    {isLoading && <p className={style.loadingText}>Loading, please wait...</p> }
+    {isError && !note && <p className={style.errorText}>Something went wrong.</p>}
     </Modal>
 }
