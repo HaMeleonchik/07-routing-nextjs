@@ -15,17 +15,19 @@ import { Note } from "@/types/note"
 interface DataProps{
   initialNotes: Note[];
   initialTotalPages: number;
-  initialSearchQuery: string;
-  initialPage: number;
   tag:string | undefined,
 }
 
-export default function NotesClient({initialNotes, initialTotalPages, initialSearchQuery, initialPage, tag}:DataProps) {
-  const [query, setQuery] = useState(initialSearchQuery)
+export default function NotesClient({initialNotes, initialTotalPages, tag}:DataProps) {
+  const [query, setQuery] = useState("")
   const [isOpenModal, setOpenModal] = useState(false)
-  const [currentPage, setCurrentPage] = useState(initialPage)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const [debouncedSearchQuery] = useDebounce(query, 300)
+
+  if (tag === "undefined") {
+    alert("no tags")
+  }
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["notes", debouncedSearchQuery, currentPage,  tag],
@@ -51,7 +53,7 @@ export default function NotesClient({initialNotes, initialTotalPages, initialSea
     {totalPages > 1 && <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />}
 		<button className={css.button} onClick={()=> setOpenModal(true)}>Create note + </button>
     </header>
-    {data?.notes && data?.notes.length > 0 && <NoteList notes={data?.notes} />}
+    {data?.notes && data?.notes.length > 0 ? <NoteList notes={data?.notes} /> : "no notes"}
     {isLoading && <p className={style.loadingText}>Loading notes, please wait...</p>}
     {isError && <p className={style.errorText}>There was an error, please try again...</p>}
     {isOpenModal &&

@@ -18,8 +18,6 @@ const tag = filterNot === "All" ? undefined : filterNot
     return <NotesClient
     initialNotes={initialData.notes}
     initialTotalPages={ initialData.totalPages}
-    initialSearchQuery={searchQuery }
-    initialPage={page}
     tag={tag}
   />
 

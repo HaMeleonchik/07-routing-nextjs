@@ -6,14 +6,14 @@ import { useParams } from "next/navigation";
 import { fetchNoteById } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import style from "../../../../components/loaderErrorCss/loaderErrorCss.module.css"
+import { Note } from "@/types/note";
 
-// interface NotePreviewProps{}
 
-export default function NotePreview() {
+export default function NotePreview({}: Record<string, never>) {
 
   const { id } = useParams<{ id: string }>();
     
- const {data:note, isLoading, isError} = useQuery({
+ const {data:note, isLoading, isError} = useQuery<Note>({
         queryKey: ["note", id],
         queryFn: () => fetchNoteById(id),
         refetchOnMount:false,
