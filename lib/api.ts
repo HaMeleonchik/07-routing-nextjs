@@ -17,7 +17,7 @@ const api = axios.create({
 })
 
 
-export async function fetchNotes(searchQuery: string, page: number, tag?:string,): Promise<{notes: Note[],  totalPages:number, tag?:string,}> {
+export async function fetchNotes(searchQuery: string, tag?:string, page: number = 1): Promise<{notes: Note[],  totalPages:number, tag?:string,}> {
     const response = await api.get<NoteHttpResponse>("/notes", {
         params: {
             ...(searchQuery.trim() && { search: searchQuery.trim() }),

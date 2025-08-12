@@ -30,13 +30,9 @@ export default function NotesClient({initialNotes, initialTotalPages, tag}:DataP
 
   const [debouncedSearchQuery] = useDebounce(query, 300)
 
-  if (tag === undefined) {
-    alert("no tags")
-  }
-
   const { data, isLoading, isError } = useQuery<NoteResponse>({
-    queryKey: ["notes", debouncedSearchQuery, currentPage,  tag],
-    queryFn: () => fetchNotes(debouncedSearchQuery, currentPage,  tag),
+    queryKey: ["notes", debouncedSearchQuery, tag,  currentPage],
+    queryFn: () => fetchNotes(debouncedSearchQuery, tag,  currentPage),
     placeholderData: keepPreviousData,
     initialData: {
       notes: initialNotes,
@@ -52,13 +48,16 @@ export default function NotesClient({initialNotes, initialTotalPages, tag}:DataP
 
   const totalPages = data?.totalPages ?? 0;
   
+const TagAllOrUndefined = tag === undefined || tag ==="All" 
+const showNotes =( TagAllOrUndefined || tag !== undefined && !isLoading && data?.notes && data?.notes.length > 0)
+
   return <div className={css.app}>
 	<header className={css.toolbar}>
       <SearchBox value={query} onSearch = { updateSearchQuery} />
     {totalPages > 1 && <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />}
 		<button className={css.button} onClick={()=> setOpenModal(true)}>Create note + </button>
     </header>
-    {data?.notes && data?.notes.length > 0 ? <NoteList notes={data?.notes} /> : "no notes"}
+    {showNotes ? <NoteList notes={data?.notes} /> : <p className={style.errorText}>No notes or tags</p>}
     {isLoading && <p className={style.loadingText}>Loading notes, please wait...</p>}
     {isError && <p className={style.errorText}>There was an error, please try again...</p>}
     {isOpenModal &&
